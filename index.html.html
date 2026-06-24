@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I'm So Sorry... ❤️</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #fff0f3; /* Pure Light Pink Background */
+            color: #333333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Floating Elements Container (Dil aur Butterflies) */
+        .effect-container {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-item {
+            position: absolute;
+            bottom: -50px;
+            animation: floatUp 6s linear infinite;
+            opacity: 0;
+            font-size: 24px;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-105vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Center Main Game Card Window */
+        .game-window {
+            width: 100%;
+            max-width: 400px;
+            background: #ffffff; 
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 75, 110, 0.15);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 35px 25px;
+            text-align: center;
+            z-index: 10;
+            border: 2px solid #ffe3e8;
+            transition: all 0.4s ease-in-out;
+        }
+
+        /* Responsive Photo Frame */
+        .photo-container {
+            width: 180px;
+            height: 180px;
+            border-radius: 20px; 
+            overflow: hidden;
+            margin-bottom: 25px;
+            border: 4px solid #fff0f3;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .question-text {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #ff477e; 
+            min-height: 60px;
+            line-height: 1.4;
+        }
+
+        /* Control Action Buttons */
+        .button-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            width: 100%;
+            min-height: 50px;
+        }
+
+        .btn {
+            padding: 12px 35px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-yes {
+            background: #4ade80;
+            color: white;
+            box-shadow: 0 4px 15px rgba(74, 222, 128, 0.4);
+        }
+
+        .btn-no {
+            background: #f87171;
+            color: white;
+            box-shadow: 0 4px 15px rgba(248, 113, 113, 0.4);
+        }
+
+        /* Final Screen adjustments */
+        .success-state {
+            background: #ffffff;
+            border: 3px solid #ff477e;
+        }
+
+        .success-state .photo-container {
+            width: 260px;
+            height: 340px;
+            border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(255, 75, 110, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="effect-container" id="effectSpace"></div>
+
+    <audio id="bairan-loop" loop>
+        <source src="dagabaj.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="game-window" id="gameWindow">
+        
+        <div class="photo-container" id="photoBox">
+            <img src="WhatsApp Image 2026-06-25 at 3.30.37 AM.jpeg" id="dynamicImg" alt="Us">
+        </div>
+
+        <div class="question-text" id="questionBox">Do you love me? 🥺</div>
+
+        <div class="button-group" id="btnGroup">
+            <button class="btn btn-yes" id="yesBtn" onclick="handleYes()">Yes</button>
+            <button class="btn btn-no" id="noBtn" onclick="handleNo()">No</button>
+        </div>
+
+    </div>
+
+    <script>
+        let clickCount = 0;
+
+        const stepsData = [
+            { text: "Please think again! 🥺", img: "WhatsApp Image 2026-06-25 at 3.40.08 AM (1).jpeg" }, 
+            { text: "Ek aur baar Soch lo! 💔", img: "WhatsApp Image 2026-06-25 at 3.40.08 AM.jpeg" }, 
+            { text: "Baby Man jao na! Kitna bhav khaogi? 😭", img: "WhatsApp Image 2026-06-25 at 3.40.09 AM.jpeg" }, 
+            { text: "Aise mat karo yaar... Maan jao! 🙏", img: "WhatsApp Image 2026-06-25 at 3.40.08 AM (2).jpeg" } 
+        ];
+
+        function createFlowingEffects() {
+            const space = document.getElementById('effectSpace');
+            const items = ['❤️', '🦋', '💖', '✨'];
+            
+            const element = document.createElement('div');
+            element.classList.add('floating-item');
+            element.innerText = items[Math.floor(Math.random() * items.length)];
+            
+            element.style.left = Math.random() * 100 + 'vw';
+            element.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            element.style.fontSize = (Math.random() * 15 + 18) + 'px';
+            
+            space.appendChild(element);
+            setTimeout(() => { element.remove(); }, 6000);
+        }
+        setInterval(createFlowingEffects, 300);
+
+        function handleNo() {
+            const audio = document.getElementById('bairan-loop');
+            audio.play().catch(e => console.log("Music Active"));
+
+            const questionBox = document.getElementById('questionBox');
+            const dynamicImg = document.getElementById('dynamicImg');
+            const yesBtn = document.getElementById('yesBtn');
+
+            if (clickCount < stepsData.length) {
+                questionBox.innerText = stepsData[clickCount].text;
+                dynamicImg.src = stepsData[clickCount].img;
+                
+                let currentScale = 1 + (clickCount * 0.3);
+                yesBtn.style.transform = `scale(${currentScale})`;
+                
+                clickCount++;
+            } else {
+                const noBtn = document.getElementById('noBtn');
+                const x = Math.random() * 140 - 70; 
+                const y = Math.random() * 140 - 70;
+                noBtn.style.transform = `translate(${x}px, ${y}px)`;
+            }
+        }
+
+        function handleYes() {
+            const gameWindow = document.getElementById('gameWindow');
+            const questionBox = document.getElementById('questionBox');
+            const dynamicImg = document.getElementById('dynamicImg');
+            const btnGroup = document.getElementById('btnGroup');
+            
+            gameWindow.classList.add('success-state');
+            
+            dynamicImg.src = "WhatsApp Image 2026-06-25 at 3.40.07 AM.jpeg";
+            questionBox.innerText = "Hehehehe, I knew it! Love you a lot ❤️✨";
+            questionBox.style.color = "#ff477e";
+            questionBox.style.fontSize = "1.5rem";
+            
+            btnGroup.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
